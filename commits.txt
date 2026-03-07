@@ -120,3 +120,4 @@ Update lockfile and deps
 Changes
 Add merchant signup flow
 Add merchant signup flow
+Enable merchant self-registration RBAC
