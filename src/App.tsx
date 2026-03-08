@@ -13,6 +13,7 @@ import MerchantDashboard from "./pages/MerchantDashboard";
 import WriteReview from "./pages/WriteReview";
 import OrderTracking from "./pages/OrderTracking";
 import CourierDashboard from "./pages/CourierDashboard";
+import Rewards from "./pages/Rewards";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ const App = () => (
             <Route path="/review/:restaurantId" element={<WriteReview />} />
             <Route path="/tracking" element={<OrderTracking />} />
             <Route path="/courier" element={<CourierDashboard />} />
+            <Route path="/rewards" element={<Rewards />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
