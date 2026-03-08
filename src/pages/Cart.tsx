@@ -7,6 +7,7 @@ import { events, restaurants } from "@/data/mockData";
 
 const Cart = () => {
   const { items, updateQuantity, removeItem, clearCart, total } = useCart();
+  const navigate = useNavigate();
 
   const deliveryFee = items.length > 0 ? 3.99 : 0;
   const serviceFee = items.length > 0 ? 1.99 : 0;
