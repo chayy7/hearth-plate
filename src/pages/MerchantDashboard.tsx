@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { merchantOrders, restaurants } from "@/data/mockData";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Package, Clock, CheckCircle, Truck, ChefHat, CalendarDays, DollarSign, TrendingUp, Users } from "lucide-react";
+import { ArrowLeft, Package, Clock, CheckCircle, Truck, ChefHat, CalendarDays, DollarSign, TrendingUp, Users, BarChart3, MessageSquare, Zap, Target } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, LineChart, Line } from "recharts";
 
 const statusConfig = {
   pending: { label: "Pending", icon: Clock, color: "bg-amber-100 text-amber-700" },
@@ -148,6 +149,82 @@ const MerchantDashboard = () => {
                   <span className="text-xs font-medium text-muted-foreground">{res.time}</span>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+
+        {/* KPI Analytics Section */}
+        <div className="mt-10">
+          <h2 className="font-heading text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 text-muted-foreground" /> Platform KPIs
+          </h2>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {[
+              { label: "Review Conversion", value: "34%", desc: "Orders with reviews", icon: MessageSquare, change: "+4.2%" },
+              { label: "Search Latency", value: "142ms", desc: "Avg response time", icon: Zap, change: "-18ms" },
+              { label: "Avg Review Length", value: "187", desc: "Characters per review", icon: Target, change: "+23 chars" },
+              { label: "Order Completion", value: "96.4%", desc: "Successful deliveries", icon: CheckCircle, change: "+1.1%" },
+            ].map((kpi, i) => (
+              <motion.div
+                key={kpi.label}
+                initial={{ opacity: 0, y: 15 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + i * 0.08 }}
+                className="rounded-xl border border-border bg-card p-5"
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <kpi.icon className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-xs font-medium text-secondary">{kpi.change}</span>
+                </div>
+                <p className="font-heading text-2xl font-bold text-foreground">{kpi.value}</p>
+                <p className="text-xs text-muted-foreground mt-1">{kpi.label}</p>
+                <p className="text-[10px] text-muted-foreground">{kpi.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* Revenue Chart */}
+            <div className="rounded-xl border border-border bg-card p-5">
+              <h3 className="font-heading text-base font-semibold text-foreground mb-4">Weekly Revenue (ARPU)</h3>
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={[
+                  { day: "Mon", revenue: 320 },
+                  { day: "Tue", revenue: 450 },
+                  { day: "Wed", revenue: 380 },
+                  { day: "Thu", revenue: 520 },
+                  { day: "Fri", revenue: 680 },
+                  { day: "Sat", revenue: 790 },
+                  { day: "Sun", revenue: 620 },
+                ]}>
+                  <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Bar dataKey="revenue" fill="hsl(28, 85%, 56%)" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Review Quality Trend */}
+            <div className="rounded-xl border border-border bg-card p-5">
+              <h3 className="font-heading text-base font-semibold text-foreground mb-4">Review Quality Trend</h3>
+              <ResponsiveContainer width="100%" height={200}>
+                <LineChart data={[
+                  { week: "W1", avgLength: 120, convRate: 28 },
+                  { week: "W2", avgLength: 135, convRate: 29 },
+                  { week: "W3", avgLength: 155, convRate: 31 },
+                  { week: "W4", avgLength: 170, convRate: 32 },
+                  { week: "W5", avgLength: 180, convRate: 33 },
+                  { week: "W6", avgLength: 187, convRate: 34 },
+                ]}>
+                  <XAxis dataKey="week" axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+                  <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+                  <Tooltip />
+                  <Line type="monotone" dataKey="avgLength" stroke="hsl(28, 85%, 56%)" strokeWidth={2} dot={{ r: 4 }} name="Avg Length" />
+                  <Line type="monotone" dataKey="convRate" stroke="hsl(145, 20%, 45%)" strokeWidth={2} dot={{ r: 4 }} name="Conv Rate %" />
+                </LineChart>
+              </ResponsiveContainer>
             </div>
           </div>
         </div>
