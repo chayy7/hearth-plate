@@ -11,6 +11,8 @@ import EventDetail from "./pages/EventDetail";
 import Cart from "./pages/Cart";
 import MerchantDashboard from "./pages/MerchantDashboard";
 import WriteReview from "./pages/WriteReview";
+import OrderTracking from "./pages/OrderTracking";
+import CourierDashboard from "./pages/CourierDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +32,8 @@ const App = () => (
             <Route path="/cart" element={<Cart />} />
             <Route path="/merchant" element={<MerchantDashboard />} />
             <Route path="/review/:restaurantId" element={<WriteReview />} />
+            <Route path="/tracking" element={<OrderTracking />} />
+            <Route path="/courier" element={<CourierDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

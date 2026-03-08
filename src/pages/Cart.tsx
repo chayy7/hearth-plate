@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, CalendarDays, Ticket, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,6 +7,7 @@ import { events, restaurants } from "@/data/mockData";
 
 const Cart = () => {
   const { items, updateQuantity, removeItem, clearCart, total } = useCart();
+  const navigate = useNavigate();
 
   const deliveryFee = items.length > 0 ? 3.99 : 0;
   const serviceFee = items.length > 0 ? 1.99 : 0;
@@ -109,7 +110,11 @@ const Cart = () => {
               </div>
 
               <button
-                onClick={() => toast.success("Order placed! 🎉")}
+                onClick={() => {
+                  toast.success("Order placed! 🎉");
+                  clearCart();
+                  navigate("/tracking");
+                }}
                 className="mt-6 w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
               >
                 Place Order · ${(total + deliveryFee + serviceFee).toFixed(2)}
