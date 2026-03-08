@@ -3,9 +3,10 @@ import HeroSection from "@/components/HeroSection";
 import CuisineFilter from "@/components/CuisineFilter";
 import RestaurantCard from "@/components/RestaurantCard";
 import EventsSection from "@/components/EventsSection";
-import { restaurants, distanceFilters, ratingFilters, sortOptions } from "@/data/mockData";
+import { distanceFilters, ratingFilters, sortOptions } from "@/data/mockData";
+import { useRestaurants } from "@/hooks/useRestaurants";
 import { motion } from "framer-motion";
-import { SlidersHorizontal, MapPin, Star, ArrowUpDown } from "lucide-react";
+import { SlidersHorizontal, MapPin, Star, ArrowUpDown, Loader2 } from "lucide-react";
 
 const Index = () => {
   const [selectedCuisine, setSelectedCuisine] = useState("All");
@@ -13,6 +14,8 @@ const Index = () => {
   const [minRating, setMinRating] = useState(0);
   const [sortBy, setSortBy] = useState("recommended");
   const [showFilters, setShowFilters] = useState(false);
+
+  const { data: restaurants = [], isLoading } = useRestaurants();
 
   const filtered = useMemo(() => {
     let result = restaurants;
@@ -154,11 +157,17 @@ const Index = () => {
           <CuisineFilter selected={selectedCuisine} onSelect={setSelectedCuisine} />
         </motion.div>
 
-        <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((restaurant, i) => (
-            <RestaurantCard key={restaurant.id} restaurant={restaurant} index={i} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="flex justify-center py-20">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : (
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filtered.map((restaurant, i) => (
+              <RestaurantCard key={restaurant.id} restaurant={restaurant} index={i} />
+            ))}
+          </div>
+        )}
 
         {filtered.length === 0 && (
           <div className="py-20 text-center">

@@ -6,13 +6,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, CalendarDays, Ticket, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { events, restaurants } from "@/data/mockData";
+import { events } from "@/data/mockData";
+import { useRestaurants } from "@/hooks/useRestaurants";
 
 const Cart = () => {
   const { items, eventTickets, updateQuantity, removeItem, updateTicketQuantity, removeEventTicket, clearCart, total } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [placing, setPlacing] = useState(false);
+  const { data: restaurantsData = [] } = useRestaurants();
 
   const hasFoodItems = items.length > 0;
   const hasTickets = eventTickets.length > 0;
@@ -213,7 +215,7 @@ const Cart = () => {
 
             {/* Cross-sell: Reserve a table */}
             {hasFoodItems && (() => {
-              const restaurant = restaurants.find(r => r.id === items[0].restaurantId);
+              const restaurant = restaurantsData.find(r => r.id === items[0].restaurantId);
               return restaurant?.hasTableReservation ? (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-6 rounded-2xl border border-border bg-accent/50 p-5">
                   <div className="flex items-start gap-3">

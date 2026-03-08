@@ -1,18 +1,28 @@
 import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
-import { restaurants, sampleReviews } from "@/data/mockData";
+import { useRestaurant } from "@/hooks/useRestaurants";
+import { useReviews } from "@/hooks/useReviews";
 import { useCart } from "@/context/CartContext";
-import { Star, Clock, MapPin, ArrowLeft, Plus, Minus, CalendarDays, ShoppingBag } from "lucide-react";
+import { Star, Clock, MapPin, ArrowLeft, Plus, Minus, CalendarDays, ShoppingBag, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import ReservationModal from "@/components/ReservationModal";
 
 const RestaurantDetail = () => {
   const { id } = useParams();
-  const restaurant = restaurants.find(r => r.id === id);
+  const { restaurant, isLoading } = useRestaurant(id);
+  const { data: reviews = [], isLoading: reviewsLoading } = useReviews(id);
   const { addItem, items } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [reservationOpen, setReservationOpen] = useState(false);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (!restaurant) {
     return (
@@ -181,30 +191,38 @@ const RestaurantDetail = () => {
               </Link>
             </div>
             <div className="space-y-4">
-              {sampleReviews.map(review => (
-                <div key={review.id} className="rounded-xl border border-border bg-card p-5">
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent">
-                        <span className="text-sm font-semibold text-accent-foreground">{review.userName[0]}</span>
-                      </div>
-                      <span className="font-semibold text-foreground text-sm">{review.userName}</span>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      {Array.from({ length: review.rating }).map((_, i) => (
-                        <Star key={i} className="h-3.5 w-3.5 fill-primary text-primary" />
-                      ))}
-                    </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground">{review.text}</p>
-                  <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-                    <span>{review.date}</span>
-                    <span className="flex items-center gap-1 text-primary font-medium">
-                      +{review.rewardPoints} pts earned
-                    </span>
-                  </div>
+              {reviewsLoading ? (
+                <div className="flex justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
                 </div>
-              ))}
+              ) : reviews.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-4">No reviews yet. Be the first to write one!</p>
+              ) : (
+                reviews.map(review => (
+                  <div key={review.id} className="rounded-xl border border-border bg-card p-5">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-accent">
+                          <span className="text-sm font-semibold text-accent-foreground">{review.userName[0]}</span>
+                        </div>
+                        <span className="font-semibold text-foreground text-sm">{review.userName}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {Array.from({ length: review.rating }).map((_, i) => (
+                          <Star key={i} className="h-3.5 w-3.5 fill-primary text-primary" />
+                        ))}
+                      </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground">{review.text}</p>
+                    <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+                      <span>{review.date}</span>
+                      <span className="flex items-center gap-1 text-primary font-medium">
+                        +{review.rewardPoints} pts earned
+                      </span>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Star, Clock, MapPin, Utensils, CalendarDays } from "lucide-react";
-import { Restaurant } from "@/data/mockData";
+import type { Restaurant } from "@/hooks/useRestaurants";
 import { motion } from "framer-motion";
 
 interface Props {

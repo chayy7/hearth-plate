@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
-import { restaurants, AI_REVIEW_PROMPTS, REVIEW_SCORING, HELPFUL_TAGS } from "@/data/mockData";
+import { useRestaurant } from "@/hooks/useRestaurants";
+import { AI_REVIEW_PROMPTS, REVIEW_SCORING, HELPFUL_TAGS } from "@/data/mockData";
 import { ArrowLeft, Star, Gift, Sparkles, Image as ImageIcon, ThumbsUp, Trophy, Tag, Camera } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -14,7 +15,7 @@ const FOOD_KEYWORDS = [
 
 const WriteReview = () => {
   const { restaurantId } = useParams();
-  const restaurant = restaurants.find(r => r.id === restaurantId);
+  const { restaurant, isLoading } = useRestaurant(restaurantId);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
@@ -87,6 +88,14 @@ const WriteReview = () => {
       prev.includes(tag) ? prev.filter(t => t !== tag) : prev.length < 3 ? [...prev, tag] : prev
     );
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
 
   if (!restaurant) {
     return (
