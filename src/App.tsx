@@ -11,6 +11,8 @@ import EventDetail from "./pages/EventDetail";
 import Cart from "./pages/Cart";
 import MerchantDashboard from "./pages/MerchantDashboard";
 import WriteReview from "./pages/WriteReview";
+import OrderTracking from "./pages/OrderTracking";
+import CourierDashboard from "./pages/CourierDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
