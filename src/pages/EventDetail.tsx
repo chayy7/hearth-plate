@@ -1,12 +1,15 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { events } from "@/data/mockData";
-import { CalendarDays, Clock, MapPin, Users, ArrowLeft, Ticket } from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import { CalendarDays, Clock, MapPin, Users, ArrowLeft, Ticket, ShoppingBag } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 
 const EventDetail = () => {
   const { id } = useParams();
   const event = events.find(e => e.id === id);
+  const { addEventTicket, eventTickets } = useCart();
+  const navigate = useNavigate();
 
   if (!event) {
     return (
@@ -18,6 +21,7 @@ const EventDetail = () => {
   }
 
   const fillPercent = ((event.totalSpots - event.spotsLeft) / event.totalSpots) * 100;
+  const existingTicket = eventTickets.find(t => t.event.id === event.id);
 
   return (
     <div className="min-h-screen">
@@ -88,12 +92,27 @@ const EventDetail = () => {
                 </div>
               </div>
             </div>
-            <button
-              onClick={() => toast.success("Ticket booked! 🎉")}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
-            >
-              <Ticket className="h-4 w-4" /> Book Ticket · ${event.price}
-            </button>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => {
+                  addEventTicket(event);
+                  toast.success("Ticket added to cart! 🎟️");
+                }}
+                className="flex-1 flex items-center justify-center gap-2 rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+              >
+                <Ticket className="h-4 w-4" />
+                {existingTicket ? `Add Another (${existingTicket.quantity} in cart)` : `Add to Cart · $${event.price}`}
+              </button>
+              {existingTicket && (
+                <button
+                  onClick={() => navigate("/cart")}
+                  className="flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 py-3.5 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
+                >
+                  <ShoppingBag className="h-4 w-4" /> View Cart
+                </button>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>
