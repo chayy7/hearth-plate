@@ -1,8 +1,11 @@
 import { useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useRestaurant } from "@/hooks/useRestaurants";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 import { AI_REVIEW_PROMPTS, REVIEW_SCORING, HELPFUL_TAGS } from "@/data/mockData";
-import { ArrowLeft, Star, Gift, Sparkles, Image as ImageIcon, ThumbsUp, Trophy, Tag, Camera } from "lucide-react";
+import { ArrowLeft, Star, Gift, Sparkles, Image as ImageIcon, ThumbsUp, Trophy, Tag, Camera, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
