@@ -214,7 +214,7 @@ const Cart = () => {
 
             {/* Cross-sell: Reserve a table */}
             {hasFoodItems && (() => {
-              const restaurant = restaurants.find(r => r.id === items[0].restaurantId);
+              const restaurant = restaurantsData.find(r => r.id === items[0].restaurantId);
               return restaurant?.hasTableReservation ? (
                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="mt-6 rounded-2xl border border-border bg-accent/50 p-5">
                   <div className="flex items-start gap-3">
