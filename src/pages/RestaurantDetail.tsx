@@ -245,6 +245,14 @@ const RestaurantDetail = () => {
           </div>
         </div>
       </div>
+
+      {restaurant.hasTableReservation && (
+        <ReservationModal
+          restaurantName={restaurant.name}
+          isOpen={reservationOpen}
+          onClose={() => setReservationOpen(false)}
+        />
+      )}
     </div>
   );
 };
