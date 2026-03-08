@@ -3,9 +3,10 @@ import HeroSection from "@/components/HeroSection";
 import CuisineFilter from "@/components/CuisineFilter";
 import RestaurantCard from "@/components/RestaurantCard";
 import EventsSection from "@/components/EventsSection";
-import { restaurants, distanceFilters, ratingFilters, sortOptions } from "@/data/mockData";
+import { distanceFilters, ratingFilters, sortOptions } from "@/data/mockData";
+import { useRestaurants } from "@/hooks/useRestaurants";
 import { motion } from "framer-motion";
-import { SlidersHorizontal, MapPin, Star, ArrowUpDown } from "lucide-react";
+import { SlidersHorizontal, MapPin, Star, ArrowUpDown, Loader2 } from "lucide-react";
 
 const Index = () => {
   const [selectedCuisine, setSelectedCuisine] = useState("All");
