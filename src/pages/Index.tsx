@@ -15,6 +15,8 @@ const Index = () => {
   const [sortBy, setSortBy] = useState("recommended");
   const [showFilters, setShowFilters] = useState(false);
 
+  const { data: restaurants = [], isLoading } = useRestaurants();
+
   const filtered = useMemo(() => {
     let result = restaurants;
 
