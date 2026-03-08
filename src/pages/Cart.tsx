@@ -110,7 +110,11 @@ const Cart = () => {
               </div>
 
               <button
-                onClick={() => toast.success("Order placed! 🎉")}
+                onClick={() => {
+                  toast.success("Order placed! 🎉");
+                  clearCart();
+                  navigate("/tracking");
+                }}
                 className="mt-6 w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
               >
                 Place Order · ${(total + deliveryFee + serviceFee).toFixed(2)}
