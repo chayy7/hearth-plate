@@ -6,7 +6,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, CalendarDays, Ticket, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
-import { events, restaurants } from "@/data/mockData";
+import { events } from "@/data/mockData";
+import { useRestaurants } from "@/hooks/useRestaurants";
 
 const Cart = () => {
   const { items, eventTickets, updateQuantity, removeItem, updateTicketQuantity, removeEventTicket, clearCart, total } = useCart();
