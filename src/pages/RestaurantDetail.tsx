@@ -12,6 +12,7 @@ const RestaurantDetail = () => {
   const restaurant = restaurants.find(r => r.id === id);
   const { addItem, items } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [reservationOpen, setReservationOpen] = useState(false);
 
   if (!restaurant) {
     return (
