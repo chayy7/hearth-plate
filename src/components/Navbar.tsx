@@ -52,9 +52,9 @@ const Navbar = () => {
             )}
           </Link>
 
-          <button className="flex h-10 w-10 items-center justify-center rounded-full bg-muted hover:bg-accent transition-colors">
+          <Link to="/rewards" className="flex h-10 w-10 items-center justify-center rounded-full bg-muted hover:bg-accent transition-colors">
             <User className="h-5 w-5 text-foreground" />
-          </button>
+          </Link>
         </div>
       </div>
     </motion.nav>
