@@ -5,12 +5,14 @@ import { useCart } from "@/context/CartContext";
 import { Star, Clock, MapPin, ArrowLeft, Plus, Minus, CalendarDays, ShoppingBag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import ReservationModal from "@/components/ReservationModal";
 
 const RestaurantDetail = () => {
   const { id } = useParams();
   const restaurant = restaurants.find(r => r.id === id);
   const { addItem, items } = useCart();
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [reservationOpen, setReservationOpen] = useState(false);
 
   if (!restaurant) {
     return (
@@ -79,7 +81,10 @@ const RestaurantDetail = () => {
                 </button>
               )}
               {restaurant.hasTableReservation && (
-                <button className="flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:bg-muted transition-colors">
+                <button
+                  onClick={() => setReservationOpen(true)}
+                  className="flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
+                >
                   <CalendarDays className="h-4 w-4" /> Reserve Table
                 </button>
               )}
@@ -240,6 +245,14 @@ const RestaurantDetail = () => {
           </div>
         </div>
       </div>
+
+      {restaurant.hasTableReservation && (
+        <ReservationModal
+          restaurantName={restaurant.name}
+          isOpen={reservationOpen}
+          onClose={() => setReservationOpen(false)}
+        />
+      )}
     </div>
   );
 };
