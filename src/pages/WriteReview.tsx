@@ -15,7 +15,7 @@ const FOOD_KEYWORDS = [
 
 const WriteReview = () => {
   const { restaurantId } = useParams();
-  const restaurant = restaurants.find(r => r.id === restaurantId);
+  const { restaurant, isLoading } = useRestaurant(restaurantId);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
