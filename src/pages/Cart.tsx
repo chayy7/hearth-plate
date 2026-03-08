@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, CalendarDays, Ticket, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -7,7 +10,9 @@ import { events, restaurants } from "@/data/mockData";
 
 const Cart = () => {
   const { items, eventTickets, updateQuantity, removeItem, updateTicketQuantity, removeEventTicket, clearCart, total } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const [placing, setPlacing] = useState(false);
 
   const hasFoodItems = items.length > 0;
   const hasTickets = eventTickets.length > 0;
