@@ -168,6 +168,7 @@ const Cart = () => {
 
                   setPlacing(true);
                   try {
+                    let createdOrderId: string | null = null;
                     if (user && hasFoodItems) {
                       const foodSubtotal = items.reduce((s, i) => s + i.menuItem.price * i.quantity, 0);
                       const { data: order, error: orderErr } = await supabase
@@ -185,6 +186,7 @@ const Cart = () => {
                         .single();
 
                       if (orderErr) throw orderErr;
+                      createdOrderId = order.id;
 
                       const orderItems = items.map(i => ({
                         order_id: order.id,
@@ -199,7 +201,7 @@ const Cart = () => {
 
                     toast.success("Order placed! 🎉");
                     clearCart();
-                    navigate(user && hasFoodItems ? `/tracking/${order!.id}` : "/tracking");
+                    navigate(createdOrderId ? `/tracking/${createdOrderId}` : "/");
                   } catch (err: any) {
                     toast.error(err.message || "Failed to place order");
                   } finally {
