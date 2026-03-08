@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      menu_items: {
+        Row: {
+          available: boolean
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          price: number
+          restaurant_id: string
+        }
+        Insert: {
+          available?: boolean
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          price: number
+          restaurant_id: string
+        }
+        Update: {
+          available?: boolean
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          price?: number
+          restaurant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "menu_items_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_items: {
         Row: {
           created_at: string
@@ -126,6 +167,116 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      restaurants: {
+        Row: {
+          address: string | null
+          created_at: string
+          cuisine: string
+          delivery_time: string | null
+          description: string | null
+          distance: string | null
+          distance_km: number
+          has_delivery: boolean
+          has_table_reservation: boolean
+          id: string
+          image_url: string | null
+          latitude: number | null
+          longitude: number | null
+          name: string
+          price_range: string | null
+          rating: number
+          review_count: number
+          tags: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          cuisine: string
+          delivery_time?: string | null
+          description?: string | null
+          distance?: string | null
+          distance_km?: number
+          has_delivery?: boolean
+          has_table_reservation?: boolean
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          price_range?: string | null
+          rating?: number
+          review_count?: number
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          cuisine?: string
+          delivery_time?: string | null
+          description?: string | null
+          distance?: string | null
+          distance_km?: number
+          has_delivery?: boolean
+          has_table_reservation?: boolean
+          id?: string
+          image_url?: string | null
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          price_range?: string | null
+          rating?: number
+          review_count?: number
+          tags?: string[] | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          created_at: string
+          helpful: number
+          id: string
+          rating: number
+          restaurant_id: string
+          review_text: string | null
+          reward_points: number
+          tags: string[] | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          helpful?: number
+          id?: string
+          rating: number
+          restaurant_id: string
+          review_text?: string | null
+          reward_points?: number
+          tags?: string[] | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          helpful?: number
+          id?: string
+          rating?: number
+          restaurant_id?: string
+          review_text?: string | null
+          reward_points?: number
+          tags?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
