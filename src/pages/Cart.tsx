@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
-import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, CalendarDays, Ticket, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { events, restaurants } from "@/data/mockData";
 
 const Cart = () => {
   const { items, updateQuantity, removeItem, clearCart, total } = useCart();
