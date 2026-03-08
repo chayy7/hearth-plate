@@ -19,12 +19,15 @@ const FOOD_KEYWORDS = [
 const WriteReview = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useRestaurant(restaurantId);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [hasImage, setHasImage] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const wordCount = reviewText.trim().split(/\s+/).filter(Boolean).length;
 
