@@ -199,7 +199,7 @@ const Cart = () => {
 
                     toast.success("Order placed! 🎉");
                     clearCart();
-                    navigate("/tracking");
+                    navigate(user && hasFoodItems ? `/tracking/${order!.id}` : "/tracking");
                   } catch (err: any) {
                     toast.error(err.message || "Failed to place order");
                   } finally {

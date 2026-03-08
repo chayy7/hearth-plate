@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { ArrowLeft, MapPin, Clock, Phone, CheckCircle, ChefHat, Truck, Package, Store } from "lucide-react";
+import { Link, useParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { ArrowLeft, MapPin, Clock, Phone, CheckCircle, ChefHat, Truck, Package, Store, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 const ORDER_STEPS = [
@@ -12,37 +13,123 @@ const ORDER_STEPS = [
   { key: "delivered", label: "Delivered", icon: CheckCircle, description: "Enjoy your meal!" },
 ];
 
+interface OrderData {
+  id: string;
+  status: string;
+  restaurant_name: string;
+  subtotal: number;
+  delivery_fee: number;
+  service_fee: number;
+  total: number;
+  created_at: string;
+}
+
+interface OrderItem {
+  id: string;
+  item_name: string;
+  item_price: number;
+  quantity: number;
+}
+
 const OrderTracking = () => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [elapsedMinutes, setElapsedMinutes] = useState(0);
+  const { orderId } = useParams();
+  const [order, setOrder] = useState<OrderData | null>(null);
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // Simulate order progression
+  // Fetch order + items
   useEffect(() => {
-    if (currentStep >= ORDER_STEPS.length - 1) return;
-    const delays = [3000, 5000, 8000, 6000, 10000]; // ms between steps
-    const timer = setTimeout(() => {
-      setCurrentStep(prev => prev + 1);
-    }, delays[currentStep] || 5000);
-    return () => clearTimeout(timer);
-  }, [currentStep]);
+    if (!orderId) {
+      setLoading(false);
+      return;
+    }
 
+    const fetchOrder = async () => {
+      const [orderRes, itemsRes] = await Promise.all([
+        supabase.from("orders").select("*").eq("id", orderId).single(),
+        supabase.from("order_items").select("*").eq("order_id", orderId),
+      ]);
+      if (orderRes.data) setOrder(orderRes.data as OrderData);
+      if (itemsRes.data) setOrderItems(itemsRes.data as OrderItem[]);
+      setLoading(false);
+    };
+
+    fetchOrder();
+  }, [orderId]);
+
+  // Subscribe to real-time status updates
   useEffect(() => {
-    const timer = setInterval(() => setElapsedMinutes(prev => prev + 1), 60000);
-    return () => clearInterval(timer);
-  }, []);
+    if (!orderId) return;
 
-  const estimatedTime = currentStep < 5 ? `${25 - currentStep * 4}-${35 - currentStep * 4} min` : "Arrived!";
+    const channel = supabase
+      .channel(`order-${orderId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "orders",
+          filter: `id=eq.${orderId}`,
+        },
+        (payload) => {
+          setOrder((prev) =>
+            prev ? { ...prev, ...payload.new } as OrderData : prev
+          );
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [orderId]);
+
+  const currentStepIndex = order
+    ? ORDER_STEPS.findIndex((s) => s.key === order.status)
+    : 0;
+  const currentStep = currentStepIndex >= 0 ? currentStepIndex : 0;
+
+  const estimatedTime =
+    currentStep < 5
+      ? `${25 - currentStep * 4}-${35 - currentStep * 4} min`
+      : "Arrived!";
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (!orderId || !order) {
+    return (
+      <div className="container mx-auto px-4 py-20 text-center">
+        <p className="text-muted-foreground text-lg">No order found.</p>
+        <Link to="/orders" className="text-primary mt-4 inline-block hover:underline">
+          View Order History
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         <div className="flex items-center gap-4 mb-8">
-          <Link to="/" className="flex h-10 w-10 items-center justify-center rounded-full bg-muted hover:bg-accent transition-colors">
+          <Link
+            to="/"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-muted hover:bg-accent transition-colors"
+          >
             <ArrowLeft className="h-5 w-5 text-foreground" />
           </Link>
           <div>
-            <h1 className="font-heading text-2xl font-bold text-foreground">Order Tracking</h1>
-            <p className="text-sm text-muted-foreground">Order #FL-2847</p>
+            <h1 className="font-heading text-2xl font-bold text-foreground">
+              Order Tracking
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              {order.restaurant_name} · #{order.id.slice(0, 8)}
+            </p>
           </div>
         </div>
 
@@ -71,22 +158,24 @@ const OrderTracking = () => {
                 )}
               </div>
               <p className="text-sm font-medium text-foreground mt-3">
-                {currentStep < 4 ? "Trattoria Bella" : "Courier en route"}
+                {currentStep < 4 ? order.restaurant_name : "Courier en route"}
               </p>
-              <p className="text-xs text-muted-foreground">42 Via Roma Street</p>
             </div>
           </div>
 
-          {/* Estimated time badge */}
           <div className="absolute top-3 right-3 rounded-full bg-card border border-border px-3 py-1.5 flex items-center gap-1.5">
             <Clock className="h-3.5 w-3.5 text-primary" />
-            <span className="text-xs font-semibold text-foreground">{estimatedTime}</span>
+            <span className="text-xs font-semibold text-foreground">
+              {estimatedTime}
+            </span>
           </div>
         </motion.div>
 
         {/* Status Steps */}
         <div className="rounded-2xl border border-border bg-card p-6 mb-6">
-          <h3 className="font-heading text-lg font-semibold text-foreground mb-6">Order Status</h3>
+          <h3 className="font-heading text-lg font-semibold text-foreground mb-6">
+            Order Status
+          </h3>
           <div className="space-y-0">
             {ORDER_STEPS.map((step, i) => {
               const isActive = i === currentStep;
@@ -96,29 +185,46 @@ const OrderTracking = () => {
 
               return (
                 <div key={step.key} className="flex gap-4">
-                  {/* Timeline line + dot */}
                   <div className="flex flex-col items-center">
                     <motion.div
                       initial={false}
                       animate={{
                         scale: isActive ? 1.1 : 1,
-                        backgroundColor: isDone || isActive ? "hsl(28, 85%, 56%)" : "hsl(var(--muted))",
+                        backgroundColor:
+                          isDone || isActive
+                            ? "hsl(28, 85%, 56%)"
+                            : "hsl(var(--muted))",
                       }}
                       className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
                     >
-                      <StepIcon className={`h-4 w-4 ${isDone || isActive ? "text-primary-foreground" : "text-muted-foreground"}`} />
+                      <StepIcon
+                        className={`h-4 w-4 ${
+                          isDone || isActive
+                            ? "text-primary-foreground"
+                            : "text-muted-foreground"
+                        }`}
+                      />
                     </motion.div>
                     {i < ORDER_STEPS.length - 1 && (
-                      <div className={`w-0.5 h-10 ${isDone ? "bg-primary" : "bg-border"}`} />
+                      <div
+                        className={`w-0.5 h-10 ${
+                          isDone ? "bg-primary" : "bg-border"
+                        }`}
+                      />
                     )}
                   </div>
 
-                  {/* Content */}
                   <div className="pb-8 pt-1">
-                    <p className={`text-sm font-semibold ${isFuture ? "text-muted-foreground" : "text-foreground"}`}>
+                    <p
+                      className={`text-sm font-semibold ${
+                        isFuture ? "text-muted-foreground" : "text-foreground"
+                      }`}
+                    >
                       {step.label}
                     </p>
-                    <p className="text-xs text-muted-foreground">{step.description}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {step.description}
+                    </p>
                     {isActive && (
                       <motion.div
                         initial={{ opacity: 0 }}
@@ -126,7 +232,8 @@ const OrderTracking = () => {
                         className="mt-1"
                       >
                         <span className="inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-0.5 text-[10px] font-medium text-accent-foreground">
-                          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" /> In progress
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />{" "}
+                          In progress
                         </span>
                       </motion.div>
                     )}
@@ -139,19 +246,33 @@ const OrderTracking = () => {
 
         {/* Order Details */}
         <div className="rounded-2xl border border-border bg-card p-6 mb-6">
-          <h3 className="font-heading text-base font-semibold text-foreground mb-3">Order Details</h3>
+          <h3 className="font-heading text-base font-semibold text-foreground mb-3">
+            Order Details
+          </h3>
           <div className="space-y-2 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Margherita Pizza</span>
-              <span className="text-foreground">$14.99</span>
+            {orderItems.map((item) => (
+              <div key={item.id} className="flex justify-between">
+                <span className="text-muted-foreground">
+                  {item.item_name} × {item.quantity}
+                </span>
+                <span className="text-foreground">
+                  ${(item.item_price * item.quantity).toFixed(2)}
+                </span>
+              </div>
+            ))}
+            <div className="flex justify-between text-xs text-muted-foreground pt-1">
+              <span>Delivery fee</span>
+              <span>${Number(order.delivery_fee).toFixed(2)}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Carbonara</span>
-              <span className="text-foreground">$16.99</span>
+            <div className="flex justify-between text-xs text-muted-foreground">
+              <span>Service fee</span>
+              <span>${Number(order.service_fee).toFixed(2)}</span>
             </div>
             <div className="flex justify-between border-t border-border pt-2 mt-2">
               <span className="font-semibold text-foreground">Total</span>
-              <span className="font-semibold text-foreground">$37.97</span>
+              <span className="font-semibold text-foreground">
+                ${Number(order.total).toFixed(2)}
+              </span>
             </div>
           </div>
         </div>
@@ -165,10 +286,14 @@ const OrderTracking = () => {
           >
             <div className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent">
-                <span className="text-sm font-bold text-accent-foreground">MR</span>
+                <span className="text-sm font-bold text-accent-foreground">
+                  MR
+                </span>
               </div>
               <div>
-                <p className="text-sm font-semibold text-foreground">Marco R.</p>
+                <p className="text-sm font-semibold text-foreground">
+                  Marco R.
+                </p>
                 <p className="text-xs text-muted-foreground">Your courier</p>
               </div>
             </div>
