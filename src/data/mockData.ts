@@ -200,3 +200,75 @@ export const sampleReviews: Review[] = [
   { id: "r2", userName: "James K.", rating: 4, text: "Great sushi quality. The omakase was fresh and beautifully presented. Slightly long wait but worth it.", date: "1 week ago", rewardPoints: 30, helpful: 8 },
   { id: "r3", userName: "Priya R.", rating: 5, text: "Best butter chicken in the city! Rich, creamy, and perfectly spiced. The garlic naan was pillowy soft.", date: "3 days ago", rewardPoints: 35, helpful: 15 },
 ];
+
+export interface FoodEvent {
+  id: string;
+  title: string;
+  image: string;
+  date: string;
+  time: string;
+  venue: string;
+  description: string;
+  price: number;
+  category: string;
+  spotsLeft: number;
+  totalSpots: number;
+}
+
+export const events: FoodEvent[] = [
+  {
+    id: "e1",
+    title: "Sommelier's Wine Tasting Evening",
+    image: event1,
+    date: "Mar 15, 2026",
+    time: "7:00 PM - 10:00 PM",
+    venue: "Le Petit Bistro",
+    description: "Join our master sommelier for an evening of fine wines paired with artisanal cheeses. Sample 8 curated wines from Bordeaux and Tuscany.",
+    price: 75,
+    category: "Wine & Dine",
+    spotsLeft: 12,
+    totalSpots: 30,
+  },
+  {
+    id: "e2",
+    title: "Rooftop Jazz & Cocktails Night",
+    image: event2,
+    date: "Mar 22, 2026",
+    time: "8:00 PM - 11:30 PM",
+    venue: "Sky Lounge",
+    description: "Live jazz performance with craft cocktails and a stunning city skyline view. Featuring the Downtown Jazz Quartet.",
+    price: 45,
+    category: "Live Music",
+    spotsLeft: 28,
+    totalSpots: 80,
+  },
+  {
+    id: "e3",
+    title: "Italian Pasta Masterclass",
+    image: event3,
+    date: "Mar 29, 2026",
+    time: "2:00 PM - 5:00 PM",
+    venue: "Trattoria Bella",
+    description: "Learn to make fresh pasta from scratch with Chef Marco. Hands-on experience includes carbonara, ravioli, and tiramisu.",
+    price: 60,
+    category: "Cooking Class",
+    spotsLeft: 5,
+    totalSpots: 16,
+  },
+];
+
+export interface MerchantOrder {
+  id: string;
+  customerName: string;
+  items: string[];
+  total: number;
+  status: "pending" | "preparing" | "ready" | "delivered";
+  time: string;
+}
+
+export const merchantOrders: MerchantOrder[] = [
+  { id: "o1", customerName: "Alex W.", items: ["Margherita Pizza", "Carbonara"], total: 31.98, status: "pending", time: "2 min ago" },
+  { id: "o2", customerName: "Maria S.", items: ["Bruschetta", "Osso Buco", "Tiramisu"], total: 43.97, status: "preparing", time: "8 min ago" },
+  { id: "o3", customerName: "Tom B.", items: ["Caprese Salad", "Margherita Pizza"], total: 26.98, status: "ready", time: "15 min ago" },
+  { id: "o4", customerName: "Emma L.", items: ["Carbonara", "Tiramisu"], total: 26.98, status: "delivered", time: "32 min ago" },
+];
