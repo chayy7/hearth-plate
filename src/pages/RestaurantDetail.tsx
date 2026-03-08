@@ -5,6 +5,7 @@ import { useCart } from "@/context/CartContext";
 import { Star, Clock, MapPin, ArrowLeft, Plus, Minus, CalendarDays, ShoppingBag } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import ReservationModal from "@/components/ReservationModal";
 
 const RestaurantDetail = () => {
   const { id } = useParams();
