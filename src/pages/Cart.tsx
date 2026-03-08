@@ -14,6 +14,7 @@ const Cart = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [placing, setPlacing] = useState(false);
+  const { data: restaurantsData = [] } = useRestaurants();
 
   const hasFoodItems = items.length > 0;
   const hasTickets = eventTickets.length > 0;
