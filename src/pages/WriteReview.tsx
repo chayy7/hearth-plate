@@ -303,14 +303,43 @@ const WriteReview = () => {
 
         {/* Submit */}
         <button
-          onClick={() => {
+          onClick={async () => {
             if (rating === 0) { toast.error("Please add a rating"); return; }
             if (wordCount < 5) { toast.error("Please write at least 5 words"); return; }
+            if (!user) { toast.error("Please sign in to submit a review"); return; }
+            setSubmitting(true);
+            const { error } = await supabase.from("reviews").insert({
+              user_id: user.id,
+              restaurant_id: restaurantId!,
+              review_text: reviewText,
+              rating,
+              reward_points: points,
+              helpful: 0,
+              tags: selectedTags,
+            });
+            if (error) {
+              toast.error("Failed to submit review");
+              setSubmitting(false);
+              return;
+            }
+            // Update restaurant review count & rating
+            if (restaurant) {
+              const newCount = restaurant.reviewCount + 1;
+              const newRating = ((restaurant.rating * restaurant.reviewCount) + rating) / newCount;
+              await supabase.from("restaurants").update({
+                review_count: newCount,
+                rating: Math.round(newRating * 10) / 10,
+              }).eq("id", restaurantId!);
+            }
+            queryClient.invalidateQueries({ queryKey: ["reviews", restaurantId] });
+            queryClient.invalidateQueries({ queryKey: ["restaurants"] });
+            setSubmitting(false);
             setSubmitted(true);
           }}
-          disabled={rating === 0 || wordCount < 5}
-          className="w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={rating === 0 || wordCount < 5 || submitting}
+          className="w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
+          {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
           Submit Review & Earn {points} Points
         </button>
       </div>
