@@ -20,7 +20,7 @@ export function useReviews(restaurantId: string | undefined) {
 
       const { data, error } = await supabase
         .from("reviews")
-        .select("*, profiles!inner(display_name)")
+        .select("*, profiles(display_name)")
         .eq("restaurant_id", restaurantId)
         .order("created_at", { ascending: false });
 
