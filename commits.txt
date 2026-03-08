@@ -121,3 +121,4 @@ Changes
 Add merchant signup flow
 Add merchant signup flow
 Enable merchant self-registration RBAC
+Add seed accounts script
