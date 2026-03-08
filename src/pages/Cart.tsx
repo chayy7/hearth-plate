@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, CalendarDays, Ticket, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -7,7 +10,9 @@ import { events, restaurants } from "@/data/mockData";
 
 const Cart = () => {
   const { items, eventTickets, updateQuantity, removeItem, updateTicketQuantity, removeEventTicket, clearCart, total } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
+  const [placing, setPlacing] = useState(false);
 
   const hasFoodItems = items.length > 0;
   const hasTickets = eventTickets.length > 0;
@@ -152,14 +157,57 @@ const Cart = () => {
               </div>
 
               <button
-                onClick={() => {
-                  toast.success("Order placed! 🎉");
-                  clearCart();
-                  navigate("/tracking");
+                onClick={async () => {
+                  if (!user && hasFoodItems) {
+                    toast.error("Please sign in to place an order");
+                    navigate("/auth");
+                    return;
+                  }
+
+                  setPlacing(true);
+                  try {
+                    if (user && hasFoodItems) {
+                      const foodSubtotal = items.reduce((s, i) => s + i.menuItem.price * i.quantity, 0);
+                      const { data: order, error: orderErr } = await supabase
+                        .from("orders")
+                        .insert({
+                          user_id: user.id,
+                          restaurant_id: items[0].restaurantId,
+                          restaurant_name: items[0].restaurantName,
+                          subtotal: foodSubtotal,
+                          delivery_fee: deliveryFee,
+                          service_fee: serviceFee,
+                          total: grandTotal,
+                        })
+                        .select("id")
+                        .single();
+
+                      if (orderErr) throw orderErr;
+
+                      const orderItems = items.map(i => ({
+                        order_id: order.id,
+                        item_name: i.menuItem.name,
+                        item_price: i.menuItem.price,
+                        quantity: i.quantity,
+                      }));
+
+                      const { error: itemsErr } = await supabase.from("order_items").insert(orderItems);
+                      if (itemsErr) throw itemsErr;
+                    }
+
+                    toast.success("Order placed! 🎉");
+                    clearCart();
+                    navigate("/tracking");
+                  } catch (err: any) {
+                    toast.error(err.message || "Failed to place order");
+                  } finally {
+                    setPlacing(false);
+                  }
                 }}
-                className="mt-6 w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+                disabled={placing}
+                className="mt-6 w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50"
               >
-                Place Order · ${grandTotal.toFixed(2)}
+                {placing ? "Placing order..." : `Place Order · $${grandTotal.toFixed(2)}`}
               </button>
             </div>
 
