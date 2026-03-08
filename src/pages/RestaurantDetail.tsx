@@ -81,7 +81,10 @@ const RestaurantDetail = () => {
                 </button>
               )}
               {restaurant.hasTableReservation && (
-                <button className="flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:bg-muted transition-colors">
+                <button
+                  onClick={() => setReservationOpen(true)}
+                  className="flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3 text-sm font-semibold text-foreground hover:bg-muted transition-colors"
+                >
                   <CalendarDays className="h-4 w-4" /> Reserve Table
                 </button>
               )}
