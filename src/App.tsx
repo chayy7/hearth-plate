@@ -7,7 +7,9 @@ import { CartProvider } from "@/context/CartContext";
 import Navbar from "@/components/Navbar";
 import Index from "./pages/Index";
 import RestaurantDetail from "./pages/RestaurantDetail";
+import EventDetail from "./pages/EventDetail";
 import Cart from "./pages/Cart";
+import MerchantDashboard from "./pages/MerchantDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -23,7 +25,9 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/restaurant/:id" element={<RestaurantDetail />} />
+            <Route path="/event/:id" element={<EventDetail />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/merchant" element={<MerchantDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

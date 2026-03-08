@@ -2,6 +2,7 @@ import { useState } from "react";
 import HeroSection from "@/components/HeroSection";
 import CuisineFilter from "@/components/CuisineFilter";
 import RestaurantCard from "@/components/RestaurantCard";
+import EventsSection from "@/components/EventsSection";
 import { restaurants } from "@/data/mockData";
 import { motion } from "framer-motion";
 
@@ -40,6 +41,8 @@ const Index = () => {
           </div>
         )}
       </section>
+
+      <EventsSection />
     </div>
   );
 };
