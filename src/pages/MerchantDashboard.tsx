@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { merchantOrders, restaurants } from "@/data/mockData";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Package, Clock, CheckCircle, Truck, ChefHat, CalendarDays, DollarSign, TrendingUp, Users } from "lucide-react";
+import { ArrowLeft, Package, Clock, CheckCircle, Truck, ChefHat, CalendarDays, DollarSign, TrendingUp, Users, BarChart3, MessageSquare, Zap, Target } from "lucide-react";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, LineChart, Line } from "recharts";
 
 const statusConfig = {
   pending: { label: "Pending", icon: Clock, color: "bg-amber-100 text-amber-700" },
