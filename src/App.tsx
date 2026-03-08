@@ -32,6 +32,8 @@ const App = () => (
             <Route path="/cart" element={<Cart />} />
             <Route path="/merchant" element={<MerchantDashboard />} />
             <Route path="/review/:restaurantId" element={<WriteReview />} />
+            <Route path="/tracking" element={<OrderTracking />} />
+            <Route path="/courier" element={<CourierDashboard />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
