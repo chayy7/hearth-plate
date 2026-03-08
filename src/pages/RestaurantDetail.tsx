@@ -166,7 +166,15 @@ const RestaurantDetail = () => {
             </div>
 
             {/* Reviews */}
-            <h2 className="font-heading text-2xl font-bold text-foreground mt-12 mb-4">Reviews</h2>
+            <div className="flex items-center justify-between mt-12 mb-4">
+              <h2 className="font-heading text-2xl font-bold text-foreground">Reviews</h2>
+              <Link
+                to={`/review/${restaurant.id}`}
+                className="rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+              >
+                Write a Review
+              </Link>
+            </div>
             <div className="space-y-4">
               {sampleReviews.map(review => (
                 <div key={review.id} className="rounded-xl border border-border bg-card p-5">
