@@ -10,6 +10,7 @@ import RestaurantDetail from "./pages/RestaurantDetail";
 import EventDetail from "./pages/EventDetail";
 import Cart from "./pages/Cart";
 import MerchantDashboard from "./pages/MerchantDashboard";
+import WriteReview from "./pages/WriteReview";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -28,6 +29,7 @@ const App = () => (
             <Route path="/event/:id" element={<EventDetail />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/merchant" element={<MerchantDashboard />} />
+            <Route path="/review/:restaurantId" element={<WriteReview />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

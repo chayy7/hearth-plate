@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
-import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag } from "lucide-react";
+import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, CalendarDays, Ticket, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { events, restaurants } from "@/data/mockData";
 
 const Cart = () => {
   const { items, updateQuantity, removeItem, clearCart, total } = useCart();
@@ -114,6 +115,62 @@ const Cart = () => {
                 Place Order · ${(total + deliveryFee + serviceFee).toFixed(2)}
               </button>
             </div>
+
+            {/* Cross-sell: Reserve a table */}
+            {items.length > 0 && (() => {
+              const restaurant = restaurants.find(r => r.id === items[0].restaurantId);
+              return restaurant?.hasTableReservation ? (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="mt-6 rounded-2xl border border-border bg-accent/50 p-5"
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                      <CalendarDays className="h-5 w-5 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-semibold text-foreground text-sm">Dine in instead?</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {restaurant.name} has tables available tonight. Reserve and skip delivery!
+                      </p>
+                      <Link
+                        to={`/restaurant/${restaurant.id}`}
+                        className="mt-2 inline-block rounded-lg bg-primary px-4 py-1.5 text-xs font-semibold text-primary-foreground hover:opacity-90 transition-opacity"
+                      >
+                        Reserve a Table
+                      </Link>
+                    </div>
+                  </div>
+                </motion.div>
+              ) : null;
+            })()}
+
+            {/* Cross-sell: Upcoming events */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4 }}
+              className="mt-6 rounded-2xl border border-border bg-card p-5"
+            >
+              <div className="flex items-center gap-2 mb-3">
+                <Sparkles className="h-4 w-4 text-primary" />
+                <p className="font-semibold text-foreground text-sm">You might also enjoy</p>
+              </div>
+              <div className="space-y-3">
+                {events.slice(0, 2).map(event => (
+                  <Link key={event.id} to={`/event/${event.id}`} className="flex items-center gap-3 group">
+                    <img src={event.image} alt={event.title} className="h-14 w-14 rounded-lg object-cover shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-foreground group-hover:text-primary transition-colors truncate">{event.title}</p>
+                      <p className="text-xs text-muted-foreground">{event.date} · ${event.price}</p>
+                    </div>
+                    <Ticket className="h-4 w-4 text-muted-foreground shrink-0" />
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
 
             <button
               onClick={() => {
