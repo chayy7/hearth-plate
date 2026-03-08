@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCart } from "@/context/CartContext";
 import { ArrowLeft, Minus, Plus, Trash2, ShoppingBag, CalendarDays, Ticket, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
