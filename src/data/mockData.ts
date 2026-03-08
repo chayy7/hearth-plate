@@ -4,6 +4,9 @@ import restaurant3 from "@/assets/restaurant-3.jpg";
 import restaurant4 from "@/assets/restaurant-4.jpg";
 import restaurant5 from "@/assets/restaurant-5.jpg";
 import restaurant6 from "@/assets/restaurant-6.jpg";
+import event1 from "@/assets/event-1.jpg";
+import event2 from "@/assets/event-2.jpg";
+import event3 from "@/assets/event-3.jpg";
 
 export interface MenuItem {
   id: string;
