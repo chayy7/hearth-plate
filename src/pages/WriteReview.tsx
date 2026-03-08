@@ -1,8 +1,11 @@
 import { useState, useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useRestaurant } from "@/hooks/useRestaurants";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 import { AI_REVIEW_PROMPTS, REVIEW_SCORING, HELPFUL_TAGS } from "@/data/mockData";
-import { ArrowLeft, Star, Gift, Sparkles, Image as ImageIcon, ThumbsUp, Trophy, Tag, Camera } from "lucide-react";
+import { ArrowLeft, Star, Gift, Sparkles, Image as ImageIcon, ThumbsUp, Trophy, Tag, Camera, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
@@ -16,12 +19,15 @@ const FOOD_KEYWORDS = [
 const WriteReview = () => {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useRestaurant(restaurantId);
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
   const [reviewText, setReviewText] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [hasImage, setHasImage] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const wordCount = reviewText.trim().split(/\s+/).filter(Boolean).length;
 
@@ -297,14 +303,39 @@ const WriteReview = () => {
 
         {/* Submit */}
         <button
-          onClick={() => {
+          onClick={async () => {
             if (rating === 0) { toast.error("Please add a rating"); return; }
             if (wordCount < 5) { toast.error("Please write at least 5 words"); return; }
+            if (!user) { toast.error("Please sign in to submit a review"); return; }
+            setSubmitting(true);
+            const { error } = await supabase.from("reviews").insert({
+              user_id: user.id,
+              restaurant_id: restaurantId!,
+              review_text: reviewText,
+              rating,
+              reward_points: points,
+              helpful: 0,
+              tags: selectedTags,
+            });
+            if (error) {
+              toast.error("Failed to submit review");
+              setSubmitting(false);
+              return;
+            }
+            // Update restaurant review count & rating via secure function
+            await supabase.rpc("update_restaurant_review_stats", {
+              _restaurant_id: restaurantId!,
+              _new_rating: rating,
+            });
+            queryClient.invalidateQueries({ queryKey: ["reviews", restaurantId] });
+            queryClient.invalidateQueries({ queryKey: ["restaurants"] });
+            setSubmitting(false);
             setSubmitted(true);
           }}
-          disabled={rating === 0 || wordCount < 5}
-          className="w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+          disabled={rating === 0 || wordCount < 5 || submitting}
+          className="w-full rounded-xl bg-primary py-3.5 text-sm font-semibold text-primary-foreground hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
+          {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
           Submit Review & Earn {points} Points
         </button>
       </div>

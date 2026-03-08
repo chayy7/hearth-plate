@@ -276,6 +276,13 @@ export type Database = {
             referencedRelation: "restaurants"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
     }
@@ -283,7 +290,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_restaurant_review_stats: {
+        Args: { _new_rating: number; _restaurant_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
