@@ -322,15 +322,11 @@ const WriteReview = () => {
               setSubmitting(false);
               return;
             }
-            // Update restaurant review count & rating
-            if (restaurant) {
-              const newCount = restaurant.reviewCount + 1;
-              const newRating = ((restaurant.rating * restaurant.reviewCount) + rating) / newCount;
-              await supabase.from("restaurants").update({
-                review_count: newCount,
-                rating: Math.round(newRating * 10) / 10,
-              }).eq("id", restaurantId!);
-            }
+            // Update restaurant review count & rating via secure function
+            await supabase.rpc("update_restaurant_review_stats", {
+              _restaurant_id: restaurantId!,
+              _new_rating: rating,
+            });
             queryClient.invalidateQueries({ queryKey: ["reviews", restaurantId] });
             queryClient.invalidateQueries({ queryKey: ["restaurants"] });
             setSubmitting(false);
