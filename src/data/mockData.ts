@@ -26,6 +26,7 @@ export interface Restaurant {
   reviewCount: number;
   deliveryTime: string;
   distance: string;
+  distanceKm: number;
   priceRange: string;
   description: string;
   address: string;
@@ -42,6 +43,16 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface EventTicketCartItem {
+  type: "event_ticket";
+  event: FoodEvent;
+  quantity: number;
+}
+
+export type UnifiedCartItem = 
+  | (CartItem & { type: "food" })
+  | EventTicketCartItem;
+
 export interface Review {
   id: string;
   userName: string;
@@ -56,6 +67,28 @@ export const cuisineFilters = [
   "All", "Italian", "Japanese", "Mexican", "French", "Indian", "Thai", "American", "Mediterranean"
 ];
 
+export const distanceFilters = [
+  { label: "Any", value: 999 },
+  { label: "< 1 km", value: 1 },
+  { label: "< 2 km", value: 2 },
+  { label: "< 3 km", value: 3 },
+  { label: "< 5 km", value: 5 },
+];
+
+export const ratingFilters = [
+  { label: "Any", value: 0 },
+  { label: "4.0+", value: 4.0 },
+  { label: "4.5+", value: 4.5 },
+  { label: "4.8+", value: 4.8 },
+];
+
+export const sortOptions = [
+  { label: "Recommended", value: "recommended" },
+  { label: "Nearest", value: "distance" },
+  { label: "Highest Rated", value: "rating" },
+  { label: "Fastest Delivery", value: "delivery" },
+];
+
 export const restaurants: Restaurant[] = [
   {
     id: "1",
@@ -66,6 +99,7 @@ export const restaurants: Restaurant[] = [
     reviewCount: 324,
     deliveryTime: "25-35 min",
     distance: "1.2 km",
+    distanceKm: 1.2,
     priceRange: "$$",
     description: "Authentic Italian cuisine with handmade pasta and wood-fired pizzas in a cozy brick-walled setting.",
     address: "42 Via Roma Street",
@@ -90,6 +124,7 @@ export const restaurants: Restaurant[] = [
     reviewCount: 512,
     deliveryTime: "30-40 min",
     distance: "2.1 km",
+    distanceKm: 2.1,
     priceRange: "$$$",
     description: "Premium sushi and sashimi prepared by master chefs using the freshest fish flown in daily.",
     address: "88 Zen Garden Lane",
@@ -113,6 +148,7 @@ export const restaurants: Restaurant[] = [
     reviewCount: 287,
     deliveryTime: "20-30 min",
     distance: "0.8 km",
+    distanceKm: 0.8,
     priceRange: "$",
     description: "Vibrant street-style Mexican tacos and burritos with house-made salsas.",
     address: "15 Fiesta Avenue",
@@ -135,6 +171,7 @@ export const restaurants: Restaurant[] = [
     reviewCount: 198,
     deliveryTime: "35-45 min",
     distance: "3.0 km",
+    distanceKm: 3.0,
     priceRange: "$$$",
     description: "Charming French bistro with classic dishes, fine wines, and an intimate atmosphere.",
     address: "7 Rue de Lumière",
@@ -157,6 +194,7 @@ export const restaurants: Restaurant[] = [
     reviewCount: 401,
     deliveryTime: "25-35 min",
     distance: "1.5 km",
+    distanceKm: 1.5,
     priceRange: "$$",
     description: "Aromatic Indian dishes with rich spice blends and traditional tandoor cooking.",
     address: "29 Saffron Road",
@@ -180,6 +218,7 @@ export const restaurants: Restaurant[] = [
     reviewCount: 356,
     deliveryTime: "20-30 min",
     distance: "1.0 km",
+    distanceKm: 1.0,
     priceRange: "$$",
     description: "Bold Thai street food flavors with fiery curries and aromatic stir-fries.",
     address: "51 Soi Sukhumvit",
@@ -271,4 +310,34 @@ export const merchantOrders: MerchantOrder[] = [
   { id: "o2", customerName: "Maria S.", items: ["Bruschetta", "Osso Buco", "Tiramisu"], total: 43.97, status: "preparing", time: "8 min ago" },
   { id: "o3", customerName: "Tom B.", items: ["Caprese Salad", "Margherita Pizza"], total: 26.98, status: "ready", time: "15 min ago" },
   { id: "o4", customerName: "Emma L.", items: ["Carbonara", "Tiramisu"], total: 26.98, status: "delivered", time: "32 min ago" },
+];
+
+// AI Review Prompts by cuisine type
+export const AI_REVIEW_PROMPTS: Record<string, string[]> = {
+  Italian: ["How was the crust texture?", "Was the cheese quality good?", "How about the sauce-to-cheese ratio?", "Was the pasta cooked al dente?"],
+  Japanese: ["How fresh was the fish?", "Was the rice properly seasoned?", "How was the presentation?", "Was the portion size worth the price?"],
+  Mexican: ["How was the salsa freshness?", "Were the tortillas soft or crispy?", "How was the spice level?", "Was the guacamole fresh?"],
+  French: ["How was the wine pairing?", "Was the steak cooked to your preference?", "How was the dessert presentation?", "Was the service attentive?"],
+  Indian: ["How was the spice level?", "Was the sauce rich and flavorful?", "Did the naan complement the curry?", "How was the rice quality?"],
+  Thai: ["How balanced were the flavors?", "Was the spice level right?", "How fresh were the herbs?", "Was the coconut milk creamy enough?"],
+  default: ["How was the overall taste?", "Was the portion size adequate?", "How was the delivery packaging?", "Would you recommend this dish?"],
+};
+
+// Review scoring criteria
+export const REVIEW_SCORING = {
+  wordCount: [
+    { threshold: 20, points: 5, label: "20+ words" },
+    { threshold: 50, points: 5, label: "50+ words" },
+    { threshold: 100, points: 10, label: "100+ words" },
+  ],
+  keywords: { maxCount: 5, pointsEach: 2, label: "Food keywords" },
+  images: { points: 15, label: "Photo uploaded" },
+  helpfulTags: { maxCount: 3, pointsEach: 5, label: "Helpful tags" },
+  rating: { points: 5, label: "Rating given" },
+};
+
+export const HELPFUL_TAGS = [
+  "Great for dates", "Family friendly", "Good for groups",
+  "Quiet atmosphere", "Fast service", "Vegan options",
+  "Outdoor seating", "Live music", "Great cocktails",
 ];
