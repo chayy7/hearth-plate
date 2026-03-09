@@ -1,5 +1,5 @@
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { ShoppingBag, MapPin, User, LogOut, Trophy, Package } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ShoppingBag, MapPin, User, LogOut, Trophy, Package, Store, Truck } from "lucide-react";
 import SearchBar from "@/components/SearchBar";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
@@ -8,7 +8,7 @@ import { useState, useRef, useEffect } from "react";
 
 const Navbar = () => {
   const { itemCount } = useCart();
-  const { user, profile, signOut } = useAuth();
+  const { user, profile, signOut, hasRole } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -92,6 +92,16 @@ const Navbar = () => {
                     <Link to="/rewards" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors">
                       <Trophy className="h-4 w-4" /> Rewards
                     </Link>
+                    {hasRole("merchant") && (
+                      <Link to="/merchant" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors">
+                        <Store className="h-4 w-4" /> Merchant Dashboard
+                      </Link>
+                    )}
+                    {hasRole("courier") && (
+                      <Link to="/courier" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors">
+                        <Truck className="h-4 w-4" /> Courier Dashboard
+                      </Link>
+                    )}
                     <button onClick={() => { signOut(); setMenuOpen(false); }} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive hover:bg-muted transition-colors">
                       <LogOut className="h-4 w-4" /> Sign Out
                     </button>
