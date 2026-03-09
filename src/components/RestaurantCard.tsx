@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { Star, Clock, MapPin, Utensils, CalendarDays } from "lucide-react";
 import type { Restaurant } from "@/hooks/useRestaurants";
@@ -8,7 +9,7 @@ interface Props {
   index: number;
 }
 
-const RestaurantCard = ({ restaurant, index }: Props) => {
+const RestaurantCard = memo(({ restaurant, index }: Props) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -23,6 +24,7 @@ const RestaurantCard = ({ restaurant, index }: Props) => {
               alt={restaurant.name}
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
+              decoding="async"
             />
             <div className="absolute top-3 left-3 flex gap-2">
               {restaurant.hasDelivery && (
@@ -78,6 +80,8 @@ const RestaurantCard = ({ restaurant, index }: Props) => {
       </Link>
     </motion.div>
   );
-};
+});
+
+RestaurantCard.displayName = "RestaurantCard";
 
 export default RestaurantCard;

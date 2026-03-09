@@ -327,6 +327,19 @@ export type Database = {
         Args: { _new_status: string; _order_id: string }
         Returns: undefined
       }
+      place_order: {
+        Args: {
+          _delivery_fee: number
+          _items: Json
+          _restaurant_id: string
+          _restaurant_name: string
+          _service_fee: number
+          _subtotal: number
+          _total: number
+          _user_id: string
+        }
+        Returns: string
+      }
       update_restaurant_review_stats: {
         Args: { _new_rating: number; _restaurant_id: string }
         Returns: undefined

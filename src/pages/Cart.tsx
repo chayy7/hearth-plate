@@ -171,32 +171,26 @@ const Cart = () => {
                     let createdOrderId: string | null = null;
                     if (user && hasFoodItems) {
                       const foodSubtotal = items.reduce((s, i) => s + i.menuItem.price * i.quantity, 0);
-                      const { data: order, error: orderErr } = await supabase
-                        .from("orders")
-                        .insert({
-                          user_id: user.id,
-                          restaurant_id: items[0].restaurantId,
-                          restaurant_name: items[0].restaurantName,
-                          subtotal: foodSubtotal,
-                          delivery_fee: deliveryFee,
-                          service_fee: serviceFee,
-                          total: grandTotal,
-                        })
-                        .select("id")
-                        .single();
-
-                      if (orderErr) throw orderErr;
-                      createdOrderId = order.id;
-
                       const orderItems = items.map(i => ({
-                        order_id: order.id,
                         item_name: i.menuItem.name,
                         item_price: i.menuItem.price,
                         quantity: i.quantity,
                       }));
 
-                      const { error: itemsErr } = await supabase.from("order_items").insert(orderItems);
-                      if (itemsErr) throw itemsErr;
+                      // Single atomic RPC — order + items in one round-trip
+                      const { data: orderId, error } = await supabase.rpc("place_order", {
+                        _user_id: user.id,
+                        _restaurant_id: items[0].restaurantId,
+                        _restaurant_name: items[0].restaurantName,
+                        _subtotal: foodSubtotal,
+                        _delivery_fee: deliveryFee,
+                        _service_fee: serviceFee,
+                        _total: grandTotal,
+                        _items: orderItems,
+                      });
+
+                      if (error) throw error;
+                      createdOrderId = orderId;
                     }
 
                     toast.success("Order placed! 🎉");
