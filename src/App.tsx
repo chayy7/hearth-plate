@@ -9,15 +9,14 @@ import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 import { Loader2 } from "lucide-react";
 
-// Lazy-load all route pages for code splitting
 const Index = lazy(() => import("./pages/Index"));
 const RestaurantDetail = lazy(() => import("./pages/RestaurantDetail"));
 const EventDetail = lazy(() => import("./pages/EventDetail"));
 const Cart = lazy(() => import("./pages/Cart"));
 const MerchantDashboard = lazy(() => import("./pages/MerchantDashboard"));
+const MerchantAuth = lazy(() => import("./pages/MerchantAuth"));
 const WriteReview = lazy(() => import("./pages/WriteReview"));
 const OrderTracking = lazy(() => import("./pages/OrderTracking"));
-const CourierDashboard = lazy(() => import("./pages/CourierDashboard"));
 const Rewards = lazy(() => import("./pages/Rewards"));
 const Auth = lazy(() => import("./pages/Auth"));
 const OrderHistory = lazy(() => import("./pages/OrderHistory"));
@@ -26,8 +25,8 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 2, // 2 min — avoid refetching on every mount
-      gcTime: 1000 * 60 * 5,    // 5 min cache
+      staleTime: 1000 * 60 * 2,
+      gcTime: 1000 * 60 * 5,
       refetchOnWindowFocus: false,
     },
   },
@@ -55,9 +54,9 @@ const App = () => (
                 <Route path="/event/:id" element={<EventDetail />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/merchant" element={<MerchantDashboard />} />
+                <Route path="/merchant-auth" element={<MerchantAuth />} />
                 <Route path="/review/:restaurantId" element={<WriteReview />} />
                 <Route path="/tracking/:orderId?" element={<OrderTracking />} />
-                <Route path="/courier" element={<CourierDashboard />} />
                 <Route path="/rewards" element={<Rewards />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/orders" element={<OrderHistory />} />
