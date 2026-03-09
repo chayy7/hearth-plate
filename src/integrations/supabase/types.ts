@@ -290,6 +290,32 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_restaurant_orders: {
+        Args: { _restaurant_id: string }
+        Returns: {
+          created_at: string
+          delivery_fee: number
+          id: string
+          restaurant_id: string
+          restaurant_name: string
+          service_fee: number
+          status: string
+          subtotal: number
+          total: number
+          updated_at: string
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "orders"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      merchant_update_order_status: {
+        Args: { _new_status: string; _order_id: string }
+        Returns: undefined
+      }
       update_restaurant_review_stats: {
         Args: { _new_rating: number; _restaurant_id: string }
         Returns: undefined
