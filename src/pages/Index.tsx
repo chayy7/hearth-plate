@@ -7,6 +7,7 @@ import { distanceFilters, ratingFilters, sortOptions } from "@/data/mockData";
 import { useRestaurants } from "@/hooks/useRestaurants";
 import { motion } from "framer-motion";
 import { SlidersHorizontal, MapPin, Star, ArrowUpDown, Loader2 } from "lucide-react";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   const [selectedCuisine, setSelectedCuisine] = useState("All");
@@ -183,6 +184,7 @@ const Index = () => {
       </section>
 
       <EventsSection />
+      <Footer />
     </div>
   );
 };
