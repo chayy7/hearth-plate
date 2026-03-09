@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ShoppingBag, MapPin, User, LogOut, Trophy, Package, Store, Truck } from "lucide-react";
+import { ShoppingBag, MapPin, User, LogOut, Trophy, Package, Store } from "lucide-react";
 import SearchBar from "@/components/SearchBar";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
@@ -59,7 +59,6 @@ const Navbar = () => {
             )}
           </Link>
 
-          {/* User menu */}
           <div className="relative" ref={menuRef}>
             <button
               onClick={() => setMenuOpen(!menuOpen)}
@@ -94,12 +93,7 @@ const Navbar = () => {
                     </Link>
                     {hasRole("merchant") && (
                       <Link to="/merchant" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors">
-                        <Store className="h-4 w-4" /> Merchant Dashboard
-                      </Link>
-                    )}
-                    {hasRole("courier") && (
-                      <Link to="/courier" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors">
-                        <Truck className="h-4 w-4" /> Courier Dashboard
+                        <Store className="h-4 w-4" /> Admin Panel
                       </Link>
                     )}
                     <button onClick={() => { signOut(); setMenuOpen(false); }} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-destructive hover:bg-muted transition-colors">
@@ -110,6 +104,9 @@ const Navbar = () => {
                   <>
                     <Link to="/auth" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-foreground hover:bg-muted transition-colors">
                       <User className="h-4 w-4" /> Sign In / Sign Up
+                    </Link>
+                    <Link to="/merchant-auth" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors">
+                      <Store className="h-4 w-4" /> Restaurant Admin
                     </Link>
                     <Link to="/rewards" onClick={() => setMenuOpen(false)} className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-foreground hover:bg-muted transition-colors">
                       <Trophy className="h-4 w-4" /> Rewards
@@ -122,7 +119,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile search bar */}
       <div className="md:hidden px-4 pb-3">
         <SearchBar
           placeholder="Search restaurants..."
