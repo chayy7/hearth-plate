@@ -26,13 +26,8 @@ const HeroSection = () => {
               <SearchBar
                 className="flex-1"
                 variant="hero"
-                placeholder="Search restaurants, cuisines..."
-                onSearchChange={(q) => {
-                  const params = new URLSearchParams(window.location.search);
-                  if (q) params.set("q", q); else params.delete("q");
-                  window.history.replaceState(null, "", `/?${params.toString()}`);
-                  window.dispatchEvent(new Event("searchchange"));
-                }}
+                placeholder="Search for dishes, meals..."
+                searchMode="food"
               />
               <div className="flex items-center gap-2 rounded-xl bg-card border border-border px-4 py-3 card-elevated">
                 <MapPin className="h-5 w-5 text-primary shrink-0" />
