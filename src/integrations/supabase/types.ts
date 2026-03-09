@@ -14,6 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      delivery_assignments: {
+        Row: {
+          courier_id: string
+          created_at: string
+          delivered_at: string | null
+          id: string
+          order_id: string
+          payout: number
+          pickup_at: string | null
+          simulated_progress: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          courier_id: string
+          created_at?: string
+          delivered_at?: string | null
+          id?: string
+          order_id: string
+          payout?: number
+          pickup_at?: string | null
+          simulated_progress?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          courier_id?: string
+          created_at?: string
+          delivered_at?: string | null
+          id?: string
+          order_id?: string
+          payout?: number
+          pickup_at?: string | null
+          simulated_progress?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_assignments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: true
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       menu_items: {
         Row: {
           available: boolean
@@ -48,6 +95,35 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "menu_items_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      merchant_restaurants: {
+        Row: {
+          created_at: string
+          id: string
+          restaurant_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          restaurant_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          restaurant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "merchant_restaurants_restaurant_id_fkey"
             columns: ["restaurant_id"]
             isOneToOne: false
             referencedRelation: "restaurants"
@@ -285,11 +361,43 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      get_available_deliveries: {
+        Args: never
+        Returns: {
+          created_at: string
+          order_id: string
+          restaurant_id: string
+          restaurant_name: string
+          total: number
+        }[]
+      }
+      get_merchant_restaurant: { Args: { _user_id: string }; Returns: string }
       get_order_items_for_restaurant: {
         Args: { _restaurant_id: string }
         Returns: {
@@ -323,6 +431,13 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       merchant_update_order_status: {
         Args: { _new_status: string; _order_id: string }
         Returns: undefined
@@ -346,7 +461,7 @@ export type Database = {
       }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "consumer" | "merchant" | "courier"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -473,6 +588,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["consumer", "merchant", "courier"],
+    },
   },
 } as const
