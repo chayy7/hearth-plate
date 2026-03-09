@@ -70,9 +70,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-background/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs opacity-50">© {new Date().getFullYear()} FoodDash. All rights reserved.</p>
-          <p className="text-xs opacity-50">Made with 🧡 for food lovers</p>
+        <div className="border-t border-background/10 mt-10 pt-6 text-center">
+          <p className="text-xs opacity-50">&copy; 2026 DineVerse. All rights reserved.</p>
         </div>
       </div>
     </footer>

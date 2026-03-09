@@ -30,7 +30,7 @@ const Navbar = () => {
           <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-warm">
             <span className="text-lg font-bold text-primary-foreground">F</span>
           </div>
-          <span className="font-heading text-xl font-bold text-foreground">Flavour</span>
+          <span className="font-heading text-xl font-bold text-foreground">DineVerse</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-1 rounded-full bg-muted px-4 py-2 flex-1 max-w-md mx-8">
