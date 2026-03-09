@@ -27,11 +27,12 @@ const mockEvent: FoodEvent = {
   description: "A festival",
   date: "2026-04-01",
   time: "6:00 PM",
-  location: "Downtown",
+  venue: "Downtown",
   price: 25,
   image: "/event-1.jpg",
-  capacity: 100,
-  tags: ["food"],
+  category: "Food",
+  spotsLeft: 50,
+  totalSpots: 100,
 };
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
