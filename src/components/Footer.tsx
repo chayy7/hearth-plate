@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <h3 className="font-heading text-xl font-bold mb-3">🍽️ FoodDash</h3>
+            <h3 className="font-heading text-xl font-bold mb-3">DineVerse</h3>
             <p className="text-sm opacity-70 leading-relaxed">
               Discover the best local restaurants, order with ease, and earn rewards with every bite.
             </p>
