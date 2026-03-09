@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import HeroSection from "@/components/HeroSection";
 import CuisineFilter from "@/components/CuisineFilter";
 import RestaurantCard from "@/components/RestaurantCard";
