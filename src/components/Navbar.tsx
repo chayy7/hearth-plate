@@ -34,10 +34,15 @@ const Navbar = () => {
           <span className="font-heading text-xl font-bold text-foreground">DineVerse</span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-1 rounded-full bg-muted px-4 py-2 flex-1 max-w-md mx-8">
-          <Search className="h-4 w-4 text-muted-foreground" />
-          <input type="text" placeholder="Search restaurants, cuisines..." className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground ml-2" />
-        </div>
+        <SearchBar
+          className="hidden md:block flex-1 max-w-md mx-8"
+          onSearchChange={(q) => {
+            const params = new URLSearchParams(window.location.search);
+            if (q) params.set("q", q); else params.delete("q");
+            window.history.replaceState(null, "", `/?${params.toString()}`);
+            window.dispatchEvent(new Event("searchchange"));
+          }}
+        />
 
         <div className="flex items-center gap-3 sm:gap-4">
           <button className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
