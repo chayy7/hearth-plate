@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
-import { Search, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import heroImage from "@/assets/hero-food.jpg";
+import SearchBar from "@/components/SearchBar";
 
 const HeroSection = () => {
   return (
