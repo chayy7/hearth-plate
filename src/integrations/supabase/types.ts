@@ -290,6 +290,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_order_items_for_restaurant: {
+        Args: { _restaurant_id: string }
+        Returns: {
+          created_at: string
+          id: string
+          item_name: string
+          item_price: number
+          order_id: string
+          quantity: number
+        }[]
+      }
       get_restaurant_orders: {
         Args: { _restaurant_id: string }
         Returns: {
