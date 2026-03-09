@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import HeroSection from "@/components/HeroSection";
 import CuisineFilter from "@/components/CuisineFilter";
 import RestaurantCard from "@/components/RestaurantCard";
@@ -15,11 +15,36 @@ const Index = () => {
   const [minRating, setMinRating] = useState(0);
   const [sortBy, setSortBy] = useState("recommended");
   const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("q") || "";
+  });
+
+  // Listen for search changes from Navbar/Hero
+  useEffect(() => {
+    const handler = () => {
+      const params = new URLSearchParams(window.location.search);
+      setSearchQuery(params.get("q") || "");
+    };
+    window.addEventListener("searchchange", handler);
+    return () => window.removeEventListener("searchchange", handler);
+  }, []);
 
   const { data: restaurants = [], isLoading } = useRestaurants();
 
   const filtered = useMemo(() => {
     let result = restaurants;
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (r) =>
+          r.name.toLowerCase().includes(q) ||
+          r.cuisine.toLowerCase().includes(q) ||
+          r.tags.some((t) => t.toLowerCase().includes(q))
+      );
+    }
 
     if (selectedCuisine !== "All") {
       result = result.filter(r => r.cuisine === selectedCuisine);
@@ -48,7 +73,7 @@ const Index = () => {
     }
 
     return result;
-  }, [restaurants, selectedCuisine, maxDistance, minRating, sortBy]);
+  }, [restaurants, selectedCuisine, maxDistance, minRating, sortBy, searchQuery]);
 
   const activeFilterCount = (maxDistance < 999 ? 1 : 0) + (minRating > 0 ? 1 : 0) + (sortBy !== "recommended" ? 1 : 0);
 
