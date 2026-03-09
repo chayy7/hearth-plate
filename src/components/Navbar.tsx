@@ -114,10 +114,15 @@ const Navbar = () => {
 
       {/* Mobile search bar */}
       <div className="md:hidden px-4 pb-3">
-        <div className="flex items-center gap-2 rounded-full bg-muted px-4 py-2">
-          <Search className="h-4 w-4 text-muted-foreground shrink-0" />
-          <input type="text" placeholder="Search restaurants..." className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" />
-        </div>
+        <SearchBar
+          placeholder="Search restaurants..."
+          onSearchChange={(q) => {
+            const params = new URLSearchParams(window.location.search);
+            if (q) params.set("q", q); else params.delete("q");
+            window.history.replaceState(null, "", `/?${params.toString()}`);
+            window.dispatchEvent(new Event("searchchange"));
+          }}
+        />
       </div>
     </motion.nav>
   );

@@ -35,6 +35,17 @@ const Index = () => {
   const filtered = useMemo(() => {
     let result = restaurants;
 
+    // Search filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(
+        (r) =>
+          r.name.toLowerCase().includes(q) ||
+          r.cuisine.toLowerCase().includes(q) ||
+          r.tags.some((t) => t.toLowerCase().includes(q))
+      );
+    }
+
     if (selectedCuisine !== "All") {
       result = result.filter(r => r.cuisine === selectedCuisine);
     }

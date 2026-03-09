@@ -23,14 +23,17 @@ const HeroSection = () => {
             </p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-3">
-              <div className="flex items-center gap-2 rounded-xl bg-card border border-border px-4 py-3 flex-1 card-elevated">
-                <Search className="h-5 w-5 text-muted-foreground shrink-0" />
-                <input
-                  type="text"
-                  placeholder="What are you craving?"
-                  className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                />
-              </div>
+              <SearchBar
+                className="flex-1"
+                variant="hero"
+                placeholder="What are you craving?"
+                onSearchChange={(q) => {
+                  const params = new URLSearchParams(window.location.search);
+                  if (q) params.set("q", q); else params.delete("q");
+                  window.history.replaceState(null, "", `/?${params.toString()}`);
+                  window.dispatchEvent(new Event("searchchange"));
+                }}
+              />
               <div className="flex items-center gap-2 rounded-xl bg-card border border-border px-4 py-3 card-elevated">
                 <MapPin className="h-5 w-5 text-primary shrink-0" />
                 <span className="text-sm text-foreground">Downtown</span>
