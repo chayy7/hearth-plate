@@ -15,6 +15,20 @@ const Index = () => {
   const [minRating, setMinRating] = useState(0);
   const [sortBy, setSortBy] = useState("recommended");
   const [showFilters, setShowFilters] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("q") || "";
+  });
+
+  // Listen for search changes from Navbar/Hero
+  useEffect(() => {
+    const handler = () => {
+      const params = new URLSearchParams(window.location.search);
+      setSearchQuery(params.get("q") || "");
+    };
+    window.addEventListener("searchchange", handler);
+    return () => window.removeEventListener("searchchange", handler);
+  }, []);
 
   const { data: restaurants = [], isLoading } = useRestaurants();
 
