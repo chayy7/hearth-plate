@@ -73,7 +73,7 @@ const Index = () => {
     }
 
     return result;
-  }, [restaurants, selectedCuisine, maxDistance, minRating, sortBy]);
+  }, [restaurants, selectedCuisine, maxDistance, minRating, sortBy, searchQuery]);
 
   const activeFilterCount = (maxDistance < 999 ? 1 : 0) + (minRating > 0 ? 1 : 0) + (sortBy !== "recommended" ? 1 : 0);
 
