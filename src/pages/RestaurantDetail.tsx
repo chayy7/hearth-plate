@@ -261,6 +261,26 @@ const RestaurantDetail = () => {
               )}
             </div>
           </div>
+
+          {/* Mobile floating cart button */}
+          {items.length > 0 && (
+            <div className="lg:hidden fixed bottom-6 left-4 right-4 z-40">
+              <Link
+                to="/cart"
+                className="flex items-center justify-between rounded-2xl bg-primary px-6 py-4 shadow-lg"
+              >
+                <div className="flex items-center gap-3">
+                  <ShoppingBag className="h-5 w-5 text-primary-foreground" />
+                  <span className="text-sm font-semibold text-primary-foreground">
+                    {items.reduce((s, i) => s + i.quantity, 0)} items
+                  </span>
+                </div>
+                <span className="text-sm font-bold text-primary-foreground">
+                  View Cart · ${items.reduce((s, i) => s + i.menuItem.price * i.quantity, 0).toFixed(2)}
+                </span>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 

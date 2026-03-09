@@ -130,7 +130,7 @@ const MerchantDashboard = () => {
 
   return (
     <div className="min-h-screen bg-muted/30">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-6xl">
         <div className="flex items-center gap-4 mb-8">
           <Link to="/" className="flex h-10 w-10 items-center justify-center rounded-full bg-card border border-border hover:bg-muted transition-colors">
             <ArrowLeft className="h-5 w-5 text-foreground" />
@@ -154,7 +154,7 @@ const MerchantDashboard = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
           {[
             { label: "Revenue", value: `$${todayRevenue.toFixed(2)}`, icon: DollarSign, trend: `${orders.length} orders` },
             { label: "Active Orders", value: activeOrders.toString(), icon: Package, trend: "" },

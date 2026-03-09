@@ -55,14 +55,14 @@ const Auth = () => {
           <div className="text-center mb-8">
             <div className="flex justify-center mb-4">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl gradient-warm">
-                <span className="text-2xl font-bold text-primary-foreground">F</span>
+                <span className="text-2xl font-bold text-primary-foreground">D</span>
               </div>
             </div>
             <h1 className="font-heading text-2xl font-bold text-foreground">
               {mode === "login" ? "Welcome back" : "Create your account"}
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              {mode === "login" ? "Sign in to your Flavour account" : "Join Flavour and start earning rewards"}
+              {mode === "login" ? "Sign in to your DineVerse account" : "Join DineVerse and start earning rewards"}
             </p>
           </div>
 
