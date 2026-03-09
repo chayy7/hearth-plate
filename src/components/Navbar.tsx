@@ -28,7 +28,7 @@ const Navbar = () => {
       <div className="container mx-auto flex items-center justify-between px-4 py-3">
         <Link to="/" className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg gradient-warm">
-            <span className="text-lg font-bold text-primary-foreground">F</span>
+            <span className="text-lg font-bold text-primary-foreground">D</span>
           </div>
           <span className="font-heading text-xl font-bold text-foreground">DineVerse</span>
         </Link>
