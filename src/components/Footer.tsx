@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand */}
           <div>
-            <h3 className="font-heading text-xl font-bold mb-3">🍽️ FoodDash</h3>
+            <h3 className="font-heading text-xl font-bold mb-3">DineVerse</h3>
             <p className="text-sm opacity-70 leading-relaxed">
               Discover the best local restaurants, order with ease, and earn rewards with every bite.
             </p>
@@ -60,7 +60,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-2 opacity-70">
                 <Mail className="h-4 w-4 shrink-0" />
-                <span>hello@fooddash.com</span>
+                <span>hello@dineverse.com</span>
               </li>
               <li className="flex items-center gap-2 opacity-70">
                 <Phone className="h-4 w-4 shrink-0" />
@@ -70,9 +70,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="border-t border-background/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-xs opacity-50">© {new Date().getFullYear()} FoodDash. All rights reserved.</p>
-          <p className="text-xs opacity-50">Made with 🧡 for food lovers</p>
+        <div className="border-t border-background/10 mt-10 pt-6 text-center">
+          <p className="text-xs opacity-50">&copy; 2026 DineVerse. All rights reserved.</p>
         </div>
       </div>
     </footer>
