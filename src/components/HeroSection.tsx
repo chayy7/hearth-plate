@@ -26,7 +26,7 @@ const HeroSection = () => {
               <SearchBar
                 className="flex-1"
                 variant="hero"
-                placeholder="What are you craving?"
+                placeholder="Search restaurants, cuisines..."
                 onSearchChange={(q) => {
                   const params = new URLSearchParams(window.location.search);
                   if (q) params.set("q", q); else params.delete("q");
