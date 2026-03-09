@@ -132,8 +132,13 @@ const Auth = () => {
               {mode === "login" ? "Sign up" : "Sign in"}
             </button>
           </p>
+
+          <div className="mt-4 pt-4 border-t border-border text-center">
+            <Link to="/merchant-auth" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+              Are you a restaurant owner? Register here
+            </Link>
+          </div>
         </div>
-      </motion.div>
     </div>
   );
 };
