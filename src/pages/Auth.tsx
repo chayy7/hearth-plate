@@ -62,7 +62,7 @@ const Auth = () => {
               {mode === "login" ? "Welcome back" : "Create your account"}
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              {mode === "login" ? "Sign in to your Flavour account" : "Join Flavour and start earning rewards"}
+              {mode === "login" ? "Sign in to your DineVerse account" : "Join DineVerse and start earning rewards"}
             </p>
           </div>
 

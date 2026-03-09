@@ -37,6 +37,15 @@ const Navbar = () => {
           <Search className="h-4 w-4 text-muted-foreground" />
           <input type="text" placeholder="Search restaurants, cuisines..." className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground ml-2" />
         </div>
+      </div>
+
+      {/* Mobile search bar */}
+      <div className="md:hidden px-4 pb-3">
+        <div className="flex items-center gap-2 rounded-full bg-muted px-4 py-2">
+          <Search className="h-4 w-4 text-muted-foreground shrink-0" />
+          <input type="text" placeholder="Search restaurants..." className="flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground" />
+        </div>
+      </div>
 
         <div className="flex items-center gap-4">
           <button className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">

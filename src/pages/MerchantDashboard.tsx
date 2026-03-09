@@ -154,7 +154,7 @@ const MerchantDashboard = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-8">
           {[
             { label: "Revenue", value: `$${todayRevenue.toFixed(2)}`, icon: DollarSign, trend: `${orders.length} orders` },
             { label: "Active Orders", value: activeOrders.toString(), icon: Package, trend: "" },
