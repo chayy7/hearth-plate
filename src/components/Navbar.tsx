@@ -1,5 +1,6 @@
-import { Link } from "react-router-dom";
-import { ShoppingBag, MapPin, Search, User, LogOut, Trophy, Package } from "lucide-react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { ShoppingBag, MapPin, User, LogOut, Trophy, Package } from "lucide-react";
+import SearchBar from "@/components/SearchBar";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
 import { motion } from "framer-motion";
