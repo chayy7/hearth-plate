@@ -48,3 +48,4 @@ Add merchant signup flow
 Enable merchant self-registration RBAC
 Add seed accounts script
 Add hardcoded admin accounts
+Add roles & dashboards RBAC
