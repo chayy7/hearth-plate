@@ -49,3 +49,4 @@ Enable merchant self-registration RBAC
 Add seed accounts script
 Add hardcoded admin accounts
 Add roles & dashboards RBAC
+Add roles linking schema
