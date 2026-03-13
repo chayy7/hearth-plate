@@ -126,3 +126,4 @@ Add hardcoded admin accounts
 Add roles & dashboards RBAC
 Add roles linking schema
 Add admin dashboards scaffolding
+Add dual search support
