@@ -129,3 +129,4 @@ Add admin dashboards scaffolding
 Add dual search support
 Add dual search modes
 Add dual restaurant and food search
+Refined hero search placeholder
