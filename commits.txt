@@ -132,3 +132,4 @@ Add dual restaurant and food search
 Refined hero search placeholder
 Update hero placeholder
 Implement functional search bar
+Add live search suggestions
