@@ -133,3 +133,4 @@ Refined hero search placeholder
 Update hero placeholder
 Implement functional search bar
 Add live search suggestions
+Add functional SearchBar
