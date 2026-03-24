@@ -137,3 +137,4 @@ Add functional SearchBar
 Preceding changes
 Preceding changes
 Preceding changes
+Implemented search wiring
