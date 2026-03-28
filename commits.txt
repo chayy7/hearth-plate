@@ -141,3 +141,4 @@ Implemented search wiring
 Make navbar responsive fixes
 Made site responsive across devices
 Make site fully responsive
+Preceding changes
