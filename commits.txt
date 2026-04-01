@@ -70,3 +70,4 @@ Preceding changes
 Update footer branding to DineVerse
 Add footer component
 Add tests for cart and orders
+Fetch orders history data
