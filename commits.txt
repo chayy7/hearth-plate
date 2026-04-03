@@ -147,3 +147,4 @@ Add footer component
 Add tests for cart and orders
 Fetch orders history data
 Batch RPC for orders
+Add place_order function
