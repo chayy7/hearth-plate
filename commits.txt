@@ -85,3 +85,4 @@ Improve reviews DB integration
 Enable review DB persistence
 Update review submission logic
 Fix restaurant stats security
+Add update policy for reviews
