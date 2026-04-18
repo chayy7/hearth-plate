@@ -162,3 +162,4 @@ Update review submission logic
 Fix restaurant stats security
 Add update policy for reviews
 Save reviews to database
+Wire frontend to database
