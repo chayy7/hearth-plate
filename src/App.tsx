@@ -7,9 +7,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "@/context/CartContext";
 import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
+import ScrollToTop from "@/components/ScrollToTop";
 import { Loader2 } from "lucide-react";
 
 const Index = lazy(() => import("./pages/Index"));
+const Events = lazy(() => import("./pages/Events"));
 const RestaurantDetail = lazy(() => import("./pages/RestaurantDetail"));
 const EventDetail = lazy(() => import("./pages/EventDetail"));
 const Cart = lazy(() => import("./pages/Cart"));
@@ -46,10 +48,12 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <ScrollToTop />
             <Navbar />
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 <Route path="/" element={<Index />} />
+                <Route path="/events" element={<Events />} />
                 <Route path="/restaurant/:id" element={<RestaurantDetail />} />
                 <Route path="/event/:id" element={<EventDetail />} />
                 <Route path="/cart" element={<Cart />} />

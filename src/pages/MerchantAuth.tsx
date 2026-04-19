@@ -43,7 +43,17 @@ const MerchantAuth = () => {
     if (mode === "login") {
       const { error } = await signIn(email, password);
       if (error) {
-        toast.error(error.message);
+        const message = error.message?.toLowerCase() ?? "";
+        if (
+          message.includes("invalid login credentials") &&
+          email.trim().toLowerCase() === "merchant@dineverse.com"
+        ) {
+          toast.error(
+            "Demo merchant account is not seeded in this Supabase project yet. Create it in Supabase Auth > Users."
+          );
+        } else {
+          toast.error(error.message);
+        }
       } else {
         toast.success("Welcome back!");
         // Wait briefly for roles to load then redirect

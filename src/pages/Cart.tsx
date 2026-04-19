@@ -24,6 +24,22 @@ const Cart = () => {
   const serviceFee = (hasFoodItems || hasTickets) ? 1.99 : 0;
   const grandTotal = total + deliveryFee + serviceFee;
 
+  const getCheckoutErrorMessage = (err: any) => {
+    const message = String(err?.message ?? "").toLowerCase();
+    const code = String(err?.code ?? "").toUpperCase();
+
+    if (
+      code === "PGRST202" ||
+      code === "PGRST205" ||
+      message.includes("could not find the function public.place_order") ||
+      message.includes("in the schema cache")
+    ) {
+      return "Backend setup is incomplete in Supabase (missing place_order function/tables). Run the DB setup SQL once, then try checkout again.";
+    }
+
+    return err?.message || "Failed to place order";
+  };
+
   return (
     <div className="min-h-screen">
       <div className="container mx-auto px-4 py-8 max-w-2xl">
@@ -197,7 +213,7 @@ const Cart = () => {
                     clearCart();
                     navigate(createdOrderId ? `/tracking/${createdOrderId}` : "/");
                   } catch (err: any) {
-                    toast.error(err.message || "Failed to place order");
+                    toast.error(getCheckoutErrorMessage(err));
                   } finally {
                     setPlacing(false);
                   }

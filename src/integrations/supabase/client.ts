@@ -2,16 +2,50 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const cleanEnvValue = (value: string | undefined) =>
+  value?.trim().replace(/^['"]|['"]$/g, "") ?? "";
+
+const SUPABASE_PROJECT_ID = cleanEnvValue(import.meta.env.VITE_SUPABASE_PROJECT_ID);
+const SUPABASE_URL =
+  cleanEnvValue(import.meta.env.VITE_SUPABASE_URL) ||
+  (SUPABASE_PROJECT_ID ? `https://${SUPABASE_PROJECT_ID}.supabase.co` : "");
+const SUPABASE_PUBLISHABLE_KEY = cleanEnvValue(import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY);
+
+const getSupabaseConfigError = () => {
+  if (!SUPABASE_URL) return "Missing VITE_SUPABASE_URL in .env";
+  if (!SUPABASE_PUBLISHABLE_KEY) return "Missing VITE_SUPABASE_PUBLISHABLE_KEY in .env";
+
+  try {
+    const parsed = new URL(SUPABASE_URL);
+    const isSupabaseHost = parsed.hostname.endsWith(".supabase.co");
+    const isLocalHost = parsed.hostname === "localhost" || parsed.hostname === "127.0.0.1";
+    if (!isSupabaseHost && !isLocalHost) {
+      return `Unexpected Supabase host (${parsed.hostname}). Expected *.supabase.co or localhost`;
+    }
+  } catch {
+    return `Invalid VITE_SUPABASE_URL (${SUPABASE_URL})`;
+  }
+
+  return null;
+};
+
+export const supabaseConfigError = getSupabaseConfigError();
+
+if (supabaseConfigError) {
+  console.error(`[Supabase] ${supabaseConfigError}`);
+}
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
-  auth: {
-    storage: localStorage,
-    persistSession: true,
-    autoRefreshToken: true,
+export const supabase = createClient<Database>(
+  SUPABASE_URL || "https://invalid.supabase.co",
+  SUPABASE_PUBLISHABLE_KEY || "invalid-anon-key",
+  {
+    auth: {
+      storage: localStorage,
+      persistSession: true,
+      autoRefreshToken: true,
+    },
   }
-});
+);

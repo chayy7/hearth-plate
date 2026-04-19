@@ -79,7 +79,12 @@ const MerchantDashboard = () => {
   useEffect(() => {
     if (!user) return;
     const fetchRestaurant = async () => {
-      const { data } = await supabase.from("merchant_restaurants").select("restaurant_id").eq("user_id", user.id).single();
+      const { data, error } = await supabase.from("merchant_restaurants").select("restaurant_id").eq("user_id", user.id).single();
+      if (error) {
+        setRestaurantName("Demo Merchant");
+        setLoading(false);
+        return;
+      }
       if (data) {
         setRestaurantId(data.restaurant_id);
         const { data: r } = await supabase.from("restaurants").select("name, rating, review_count").eq("id", data.restaurant_id).single();
@@ -88,13 +93,19 @@ const MerchantDashboard = () => {
           setRestaurantRating(Number(r.rating));
           setRestaurantReviewCount(r.review_count);
         }
+      } else {
+        setRestaurantName("Demo Merchant");
+        setLoading(false);
       }
     };
     fetchRestaurant();
   }, [user]);
 
   const fetchData = useCallback(async () => {
-    if (!restaurantId) return;
+    if (!restaurantId) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     const [ordersRes, itemsRes, menuRes] = await Promise.all([
       supabase.rpc("get_restaurant_orders", { _restaurant_id: restaurantId }),

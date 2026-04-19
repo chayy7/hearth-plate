@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { restaurants as mockRestaurants } from "@/data/mockData";
 
 // Map DB image URLs to local assets
 import restaurant1 from "@/assets/restaurant-1.jpg";
@@ -51,15 +52,25 @@ async function fetchRestaurants(): Promise<Restaurant[]> {
     .from("restaurants")
     .select("*");
 
-  if (error) throw error;
+  if (error) {
+    console.warn("[useRestaurants] Failed to load restaurants from Supabase, using local demo data.", error);
+    return mockRestaurants;
+  }
+
+  if (!restaurants || restaurants.length === 0) {
+    console.warn("[useRestaurants] Supabase restaurants table is empty, using local demo data.");
+    return mockRestaurants;
+  }
 
   const { data: menuItems, error: menuError } = await supabase
     .from("menu_items")
     .select("*");
 
-  if (menuError) throw menuError;
+  if (menuError) {
+    console.warn("[useRestaurants] Failed to load menu items from Supabase. Showing restaurants without menu items.", menuError);
+  }
 
-  return (restaurants ?? []).map((r) => ({
+  return restaurants.map((r) => ({
     id: r.id,
     name: r.name,
     image: imageMap[r.image_url ?? ""] ?? r.image_url ?? "",

@@ -16,7 +16,7 @@ const EventsSection = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {events.map((event, i) => (
+        {events.slice(0, 3).map((event, i) => (
           <motion.div
             key={event.id}
             initial={{ opacity: 0, y: 20 }}
