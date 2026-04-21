@@ -90,3 +90,4 @@ Save reviews to database
 Wire frontend to database
 Add restaurant-related tables
 Added restaurants, menu items tables
+Add auth and profile DB support
