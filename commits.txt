@@ -93,3 +93,4 @@ Added restaurants, menu items tables
 Add auth and profile DB support
 Implement Supabase auth & orders
 Add profiles and orders schemas
+Set up user auth schema
