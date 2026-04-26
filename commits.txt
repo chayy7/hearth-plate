@@ -95,3 +95,4 @@ Implement Supabase auth & orders
 Add profiles and orders schemas
 Set up user auth schema
 Connected backend
+Added Loyalty Rewards page
