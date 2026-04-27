@@ -96,3 +96,4 @@ Add profiles and orders schemas
 Set up user auth schema
 Connected backend
 Added Loyalty Rewards page
+Enhance core features
