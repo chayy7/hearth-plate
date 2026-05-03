@@ -102,3 +102,4 @@ Add courier and tracking pages
 Added courier dashboard
 Add order tracking pages
 Add KPI analytics dashboard
+Add table reservation modal
