@@ -106,3 +106,4 @@ Add table reservation modal
 Added reservation modal
 Add gamified review page
 Integrate cross-sell in checkout
+Add cross-sell and reviews
