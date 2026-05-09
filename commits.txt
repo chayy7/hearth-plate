@@ -108,3 +108,4 @@ Add gamified review page
 Integrate cross-sell in checkout
 Add cross-sell and reviews
 Add event data and dashboards
+Add events and merchants UI
