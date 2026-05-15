@@ -114,3 +114,4 @@ Add event images assets
 Add event and merchant modules
 Implement core UI and routing
 Setup UI and mock data
+Setup design system
